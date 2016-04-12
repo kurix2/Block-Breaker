@@ -18,7 +18,6 @@ public class MusicPlayer : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         Debug.Log("Music player Start" + GetInstanceID());
-        GetComponent<AudioSource>().Play();
  
         
 	}

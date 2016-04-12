@@ -9,6 +9,7 @@ public class Brick : MonoBehaviour {
     private int timesHit;
     private LevelManager levelManager;
     private bool isBreakable;
+    public GameObject smoke;
 
 	// Use this for initialization
 	void Start () {
@@ -32,13 +33,22 @@ public class Brick : MonoBehaviour {
         int maxHits = hitSprites.Length + 1;
         if (timesHit >= maxHits){
             breakableCount--;
+            if (smoke) {
+                PuffSmoke();
+            }
             print(breakableCount);
             levelManager.BrickDestroyed();
+            
             Destroy(gameObject, 0.1f);
         }
         else {
             LoadSprites();
         }
+    }
+
+    void PuffSmoke() {
+        GameObject smokePuff = Instantiate(smoke, gameObject.transform.position, Quaternion.identity) as GameObject;
+        smokePuff.GetComponent<ParticleSystem>().startColor = gameObject.GetComponent<SpriteRenderer>().color;
     }
 
     void SimulateWin() {
@@ -47,8 +57,12 @@ public class Brick : MonoBehaviour {
 
     void LoadSprites() {
         int spriteIndex = timesHit - 1;
-        if (hitSprites[spriteIndex]) { 
+        if (hitSprites[spriteIndex])
+        {
             this.GetComponent<SpriteRenderer>().sprite = hitSprites[spriteIndex];
+        }
+        else {
+            Debug.LogError("Brick Sprite missing");
         }
     }
 
